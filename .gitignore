@@ -1,0 +1,14 @@
+# Dependencias y entornos
+node_modules/
+.env
+.env.local
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs y temporales
+*.log
+.vscode/
+.idea/
