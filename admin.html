@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOLVE // Consola Central de Administración</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos base y estilos del panel de administración -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Cabecera del Panel Admin -->
+  <header class="admin-header">
+    <div class="container admin-nav-container">
+      <div class="admin-brand">
+        <a href="index.html" class="brand-logo">
+          <span class="logo-bracket">[</span>DOLVE<span class="logo-bracket">]</span>
+        </a>
+        <span class="admin-badge">CONTROL PANEL // V1.0</span>
+      </div>
+
+      <div class="admin-header-actions">
+        <span class="status-indicator">
+          <span class="status-dot"></span> Modo Administrador Activo
+        </span>
+        <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">
+          <span>Ver Tienda Pública ↗</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+    <!-- Fila de Tarjetas de Estadísticas en Vivo -->
+    <section class="admin-stats-row">
+      <div class="admin-stat-card">
+        <div class="stat-icon">📦</div>
+        <div>
+          <h3 id="stat-total-products">0</h3>
+          <p>Productos en Catálogo</p>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="stat-icon">💰</div>
+        <div>
+          <h3 id="stat-inventory-value">$0.00</h3>
+          <p>Valor Total Inventario (USD)</p>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="stat-icon">🏷️</div>
+        <div>
+          <h3 id="stat-active-categories">0</h3>
+          <p>Categorías Activas</p>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="stat-icon">⚡</div>
+        <div>
+          <h3 id="stat-avg-price">$0.00</h3>
+          <p>Precio Promedio</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cuadrícula Principal: Formulario a la izquierda, Inventario a la derecha -->
+    <div class="admin-grid">
+      <!-- Columna 1: Formulario para añadir un nuevo producto -->
+      <section class="admin-card form-section">
+        <div class="card-header">
+          <h2>➕ Publicar Nuevo Producto</h2>
+          <p>Este formulario inyecta el producto directamente en la base de datos local sin tocar código HTML.</p>
+        </div>
+
+        <form id="new-product-form" class="admin-form">
+          <div class="form-group">
+            <label for="prod-name">Nombre del Producto *</label>
+            <input type="text" id="prod-name" placeholder="Ej: Dolve Pulse Wireless Mouse" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="prod-category">Categoría *</label>
+              <select id="prod-category" required>
+                <option value="audio">Audio Pro</option>
+                <option value="perifericos">Periféricos</option>
+                <option value="smart">Smart Gear</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="prod-price">Precio (USD) *</label>
+              <input type="number" id="prod-price" step="0.01" min="1" placeholder="Ej: 129.99" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="prod-badge">Insignia / Etiqueta</label>
+              <select id="prod-badge">
+                <option value="NUEVO">NUEVO</option>
+                <option value="HOT">HOT</option>
+                <option value="FLAGSHIP">FLAGSHIP</option>
+                <option value="LIMITADA">EDICIÓN LIMITADA</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="prod-rating">Puntuación Inicial</label>
+              <select id="prod-rating">
+                <option value="5.0/5">★★★★★ (5.0/5)</option>
+                <option value="4.9/5" selected>★★★★★ (4.9/5)</option>
+                <option value="4.8/5">★★★★☆ (4.8/5)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="prod-image">Imagen del Producto *</label>
+            <select id="prod-image-preset">
+              <option value="assets/hero-headset.jpg">Preset: Auriculares Dolve Nova Pro</option>
+              <option value="assets/keyboard-cyber.jpg">Preset: Teclado Quantum Ghost</option>
+              <option value="assets/earbuds-transparent.jpg">Preset: CyberPods Transparent</option>
+              <option value="assets/smart-display.jpg">Preset: Smart Display DeskHUD</option>
+              <option value="custom">URL personalizada...</option>
+            </select>
+            <input type="url" id="prod-image-custom" placeholder="O pega una URL de imagen (https://...)" style="display: none; margin-top: 8px;">
+          </div>
+
+          <div class="form-group">
+            <label for="prod-desc">Descripción Comercial *</label>
+            <textarea id="prod-desc" rows="3" placeholder="Describe las ventajas, materiales y propuesta de valor..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Especificaciones Técnicas (Clave : Valor)</label>
+            <div class="specs-inputs">
+              <input type="text" id="spec-key-1" placeholder="Ej: Conectividad" value="Conectividad">
+              <input type="text" id="spec-val-1" placeholder="Ej: Bluetooth 5.4 + 2.4G" value="Inalámbrico Ultrarrápido">
+            </div>
+            <div class="specs-inputs" style="margin-top: 6px;">
+              <input type="text" id="spec-key-2" placeholder="Ej: Batería" value="Batería">
+              <input type="text" id="spec-val-2" placeholder="Ej: 40 horas" value="40 Horas de uso continuo">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span>🚀 Publicar Producto en Catálogo</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Columna 2: Tabla de gestión del inventario actual -->
+      <section class="admin-card inventory-section">
+        <div class="card-header flex-between">
+          <div>
+            <h2>📋 Inventario en Catálogo</h2>
+            <p>Productos activos visibles en la tienda pública.</p>
+          </div>
+          <button id="reset-inventory-btn" class="btn btn-secondary btn-sm" title="Restaura los 4 productos de muestra originales">
+            <span>↺ Restaurar Catálogo Base</span>
+          </button>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Insignia</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-tbody">
+              <!-- Se llena dinámicamente con JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Notificación Toast para feedback -->
+  <div class="toast-notification" id="toast-notification">
+    <span class="toast-icon">✨</span>
+    <span class="toast-message" id="toast-message">Operación realizada con éxito</span>
+  </div>
+
+  <!-- Script del Panel de Administración -->
+  <script src="js/admin.js"></script>
+</body>
+</html>

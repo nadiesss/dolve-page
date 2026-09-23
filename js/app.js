@@ -15,7 +15,8 @@
 // ============================================================================
 // 1. BASE DE DATOS LOCAL DE PRODUCTOS (Simulada para aprender)
 // ============================================================================
-const DOLVE_PRODUCTS = [
+// Catálogo de fábrica por defecto
+const DEFAULT_PRODUCTS = [
   {
     id: 1,
     name: "Dolve Nova Pro Wireless",
@@ -25,7 +26,7 @@ const DOLVE_PRODUCTS = [
     rating: "★★★★★",
     ratingScore: "4.9/5",
     badge: "FLAGSHIP",
-    badgeClass: "",
+    badgeClass: "flagship",
     image: "assets/hero-headset.jpg",
     description: "Auriculares inalámbricos de estudio con transductores de titanio de 50mm, cancelación activa de ruido adaptativa y sonido espacial Dolby Atmos.",
     specs: [
@@ -93,6 +94,23 @@ const DOLVE_PRODUCTS = [
     ]
   }
 ];
+
+// Obtener productos desde localStorage (compartido con la consola de administración)
+function getCatalogProducts() {
+  const data = localStorage.getItem('dolve_catalog_products');
+  if (data) {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.error("Error al leer catálogo:", e);
+    }
+  }
+  // Si aún no se ha guardado en localStorage, guardamos los valores iniciales
+  localStorage.setItem('dolve_catalog_products', JSON.stringify(DEFAULT_PRODUCTS));
+  return DEFAULT_PRODUCTS;
+}
+
+let DOLVE_PRODUCTS = getCatalogProducts();
 
 // Base de datos de artículos del Blog
 const DOLVE_ARTICLES = {
@@ -737,4 +755,23 @@ document.addEventListener('DOMContentLoaded', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
+
+  // 15. Atajo de teclado secreto para entrar al Panel de Administración (Ctrl + Alt + A)
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.altKey && (e.key === 'a' || e.key === 'A')) {
+      e.preventDefault();
+      showToast("🔐 Accediendo a la Consola de Administración DOLVE...");
+      setTimeout(() => {
+        window.location.href = 'admin.html';
+      }, 700);
+    }
+  });
+
+  // 16. Sincronizar catálogo en tiempo real si el admin lo cambia en otra pestaña
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'dolve_catalog_products') {
+      DOLVE_PRODUCTS = getCatalogProducts();
+      renderProducts();
+    }
+  });
 });
